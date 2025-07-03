@@ -49,4 +49,11 @@ public class Smartphone extends Product {
     long imei = min + (randomLong % (max - min + 1));
     return imei;
   }
+
+  // -- Additional
+  @Override
+  public String toString() {
+    return String.format("%s\nIMEI: %d\nMemoria: %.1fGB", super.toString(), imei, memoryQuantity);
+  }
+
 }
