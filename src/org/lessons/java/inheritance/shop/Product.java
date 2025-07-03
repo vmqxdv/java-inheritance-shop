@@ -89,11 +89,8 @@ public class Product {
   }
 
   public String toString() {
-    BigDecimal formattedIva = (this.iva.multiply(new BigDecimal(100))).setScale(0, RoundingMode.DOWN);
-
     return String.format(
-        "Infomazioni prodotto:\nCodice: %s\nNome: %s\nBrand: %s\nPrezzo: %s\nIva: %s%%\nPrezzo con iva: %s", this.code,
-        this.name, this.brand, this.price.setScale(2, RoundingMode.DOWN), formattedIva,
-        getPriceAfterTax());
+        "Informazioni prodotto:\nCodice: %s\nNome: %s\nBrand: %s\nPrezzo: %.2f\nIva: %.0f%%\nPrezzo con iva: %.2f",
+        this.code, this.name, this.brand, this.price, this.iva.multiply(new BigDecimal(100)), getPriceAfterTax());
   }
 }
