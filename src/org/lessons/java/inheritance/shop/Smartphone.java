@@ -14,7 +14,7 @@ public class Smartphone extends Product {
     this.memoryQuantity = 0f;
   }
 
-  public Smartphone(String name, String brand, BigDecimal price, BigDecimal iva, long imei, float memoryQuantity) {
+  public Smartphone(String name, String brand, BigDecimal price, BigDecimal iva, float memoryQuantity) {
     super(name, brand, price, iva);
     this.imei = generateImei();
     this.memoryQuantity = memoryQuantity;
