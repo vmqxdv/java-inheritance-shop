@@ -1,6 +1,7 @@
 package org.lessons.java.inheritance.shop;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Random;
 
 public class Product {
@@ -70,5 +71,20 @@ public class Product {
   public void setIva(BigDecimal iva) {
     if (iva.compareTo(new BigDecimal(0)) > 0)
       this.iva = iva;
+  }
+
+  // -- Additional
+  public BigDecimal getPriceAfterTax() {
+    if (price != null && iva != null)
+      return price.add(price.multiply(iva)).setScale(2, RoundingMode.DOWN);
+
+    return null;
+  }
+
+  public String getFullName() {
+    if (name != null)
+      return this.code + "-" + this.name;
+
+    return null;
   }
 }
