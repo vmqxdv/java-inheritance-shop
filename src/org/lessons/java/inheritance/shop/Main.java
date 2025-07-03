@@ -13,5 +13,10 @@ public class Main {
         true);
 
     System.out.println(television.toString());
+
+    Headphones headphones = new Headphones("Air Pods Max", "Apple", new BigDecimal(589), new BigDecimal(0.22),
+        "Verde Metallico", true);
+
+    System.out.println(headphones.toString());
   }
 }
