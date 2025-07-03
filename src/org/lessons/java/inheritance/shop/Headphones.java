@@ -37,4 +37,10 @@ public class Headphones extends Product {
   public void setIsWireless(boolean isWireless) {
     this.isWireless = isWireless;
   }
+
+  // -- Additional
+  @Override
+  public String toString() {
+    return String.format("%s\nColore: %s\nFunzionalità bluetooth: %b", super.toString(), this.color, this.isWireless);
+  }
 }
