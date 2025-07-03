@@ -37,4 +37,10 @@ public class Television extends Product {
   public void setIsSmart(boolean isSmart) {
     this.isSmart = isSmart;
   }
+
+  // -- Additional
+  @Override
+  public String toString() {
+    return String.format("%s\nPollici: %d\nFunzionalità smart: %b", super.toString(), this.inch, this.isSmart);
+  }
 }
