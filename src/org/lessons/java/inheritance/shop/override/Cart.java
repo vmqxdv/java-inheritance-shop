@@ -1,5 +1,6 @@
 package org.lessons.java.inheritance.shop.override;
 
+import java.util.Arrays;
 import java.util.Scanner;
 import java.math.BigDecimal;
 
@@ -72,19 +73,25 @@ public class Cart {
     Television[] televisions = { television1, television2 };
     Headphones[] headphones = { headphones1, headphones2 };
     Product[][] productGroups = { smartphones, televisions, headphones };
+    String[] validCardIds = { "FID123ABC", "VIP456XYZ", "LOY789QWE" };
 
     Scanner sc = new Scanner(System.in);
 
     boolean isShoppingComplete = false;
 
+    String nextChoiceText = "Quale tipo di prodotto vuoi aggiungere al tuo carrello?\nDigita il numero corrispondente al prodotto:\nTelefono(0) / Televisore(1) / Cuffie(2)";
+    String errorText = "";
+
+    // -- Products selection
     do {
-      String nextChoiceText = "Quale tipo di prodotto vuoi aggiungere al tuo carrello?\nDigita il numero corrispondente al prodotto:\nTelefono(0) / Televisore(1) / Cuffie(2)";
       do {
-        System.out.println(nextChoiceText);
+        System.out.println(errorText + nextChoiceText);
         userChoice = sc.nextInt();
-        nextChoiceText = String.format("\u001B[31m\"%d\" non è un tipo di prodotto valido!\u001B[0m\n%s",
-            userChoice,
-            nextChoiceText);
+
+        if (userChoice < 0 || userChoice > 2) {
+          errorText = String.format("\n\u001B[31m\"%d\" non è un tipo di prodotto valido!\u001B[0m\n", userChoice);
+        } else
+          errorText = "";
       } while (userChoice < 0 || userChoice > 2);
 
       Product[] selectedProductGroup = productGroups[userChoice];
@@ -101,11 +108,14 @@ public class Cart {
       userChoice = sc.nextInt();
 
       while (userChoice < 0 || userChoice > (selectedProductGroup.length - 1)) {
-        nextChoiceText = String.format("\n\u001B[31m\"%d\" non è un prodotto valido!\u001B[0m\n%s", userChoice,
-            nextChoiceText);
-        System.out.println(nextChoiceText);
+        System.out.println(errorText + nextChoiceText);
 
         userChoice = sc.nextInt();
+
+        if (userChoice < 0 || userChoice > (selectedProductGroup.length - 1)) {
+          errorText = String.format("\n\u001B[31m\"%d\" non è un prodotto valido!\u001B[0m\n", userChoice);
+        } else
+          errorText = "";
       }
 
       cart.addItem(selectedProductGroup[userChoice]);
@@ -116,16 +126,61 @@ public class Cart {
       userChoice = sc.nextInt();
 
       while (userChoice < 0 || userChoice > 1) {
-        nextChoiceText = String.format("\n\u001B[31m\"%d\" non è una risposta valida!\u001B[0m\n%s", userChoice,
-            nextChoiceText);
-        System.out.println(nextChoiceText);
+        System.out.println(errorText + nextChoiceText);
 
         userChoice = sc.nextInt();
+
+        if (userChoice < 0 || userChoice > 1) {
+          errorText = String.format("\n\u001B[31m\"%d\" non è una risposta valida!\u001B[0m\n", userChoice);
+        } else
+          errorText = "";
       }
 
-      isShoppingComplete = userChoice != 0 ? true : false;
+      isShoppingComplete = userChoice > 0 ? true : false;
 
     } while (!isShoppingComplete);
+
+    // -- Fidelity Card Controll
+    String userFidelityCardCode;
+    boolean isFidelityCardValid;
+
+    nextChoiceText = "\nSei un possesso di una fideliry card? Si(0) / No(1)";
+    System.out.println(nextChoiceText);
+    userChoice = sc.nextInt();
+
+    while (userChoice < 0 || userChoice > 1) {
+      nextChoiceText = String.format("\n\u001B[31m\"%d\" non è una risposta valida!\u001B[0m\n%s", userChoice,
+          nextChoiceText);
+      System.out.println(nextChoiceText);
+
+      userChoice = sc.nextInt();
+    }
+
+    sc.nextLine();
+
+    if (userChoice == 0) {
+      nextChoiceText = "\nScrivi il codice della tua fidelity card:";
+
+      do {
+        System.out.println(errorText + nextChoiceText);
+        userFidelityCardCode = sc.nextLine();
+
+        isFidelityCardValid = Arrays.stream(validCardIds)
+            .anyMatch(userFidelityCardCode.toUpperCase()::equals);
+
+        if (!isFidelityCardValid && !userFidelityCardCode.equals("0")) {
+          errorText = String.format(
+              "\n\u001B[31m\"%s\" non è una fidelity card valida!\u001B[0m\nSe non ne possiedi una digita \"0\" e continua senza.\n\n",
+              userFidelityCardCode);
+        } else
+          errorText = "";
+
+      } while (!isFidelityCardValid && !userFidelityCardCode.equals("0"));
+
+      if (isFidelityCardValid) {
+        System.out.println("Carta valida");
+      }
+    }
 
     sc.close();
   }
