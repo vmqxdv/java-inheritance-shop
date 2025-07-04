@@ -1,6 +1,7 @@
 package org.lessons.java.inheritance.shop.override;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Scanner;
 import java.math.BigDecimal;
 
@@ -109,14 +110,15 @@ public class Cart {
     } while (!isShoppingComplete);
 
     // -- Fidelity Card Controll
-    int userFidelityCardAnswer = getValidatedIntInput(sc, "\nSei un possesso di una fidelity card? Si(0) / No(1)",
+    int userFidelityCardAnswer = getValidatedIntInput(sc, "\nSei in possesso di una fidelity card? Si(0) / No(1)",
         "non è una risposta valida!", 0, 1);
 
     sc.nextLine();
 
+    boolean isFidelityCardValid = false;
+
     if (userFidelityCardAnswer == 0) {
       String userFidelityCardCode;
-      boolean isFidelityCardValid;
       String errorText = "";
 
       do {
@@ -134,10 +136,32 @@ public class Cart {
           errorText = "";
 
       } while (!isFidelityCardValid && !userFidelityCardCode.equals("0"));
-
-      if (isFidelityCardValid)
-        System.out.println("Carta valida");
     }
+
+    // -- Order preview
+    System.out.println("+----------------+---------------+");
+    System.out.println("| Nome Prodotto  | Prezzo (€)    |");
+    System.out.println("+----------------+---------------+");
+
+    BigDecimal total = new BigDecimal(0);
+
+    for (Product product : cart.getItems()) {
+      BigDecimal discountedPrice = product.getPriceAfterDiscount(product.getDiscount(isFidelityCardValid));
+      System.out.println(String.format(Locale.ITALY, "| %-14s | %13.2f |",
+          product.getName(), discountedPrice));
+
+      if (product.getPriceAfterTax().compareTo(discountedPrice) > 0) {
+        BigDecimal discountValue = discountedPrice.subtract(product.getPriceAfterTax());
+        System.out.println(String.format(Locale.ITALY, "| %-14s | %13.2f |",
+            "Sconto", discountValue));
+      }
+
+      total = total.add(discountedPrice);
+    }
+
+    System.out.println("+----------------+---------------+");
+    System.out.println(String.format(Locale.ITALY, "| %-14s | %13.2f |", "Totale", total));
+    System.out.println("+----------------+---------------+");
 
     sc.close();
   }
