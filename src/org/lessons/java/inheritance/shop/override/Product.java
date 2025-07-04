@@ -1,4 +1,4 @@
-package org.lessons.java.inheritance.shop;
+package org.lessons.java.inheritance.shop.override;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
