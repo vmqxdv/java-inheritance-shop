@@ -50,4 +50,11 @@ public class Headphones extends Product {
     return String.format("%s, Colore: %s\nFunzionalità bluetooth: %b", super.toStringSimple(), this.color,
         this.isWireless);
   }
+
+  public float getDiscount(boolean isFidelityCardValid) {
+    if (isFidelityCardValid)
+      return !this.isWireless ? 0.07f : 0.02f;
+
+    return 0f;
+  };
 }

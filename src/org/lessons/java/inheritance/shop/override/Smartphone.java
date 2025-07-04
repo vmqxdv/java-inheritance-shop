@@ -1,6 +1,7 @@
 package org.lessons.java.inheritance.shop.override;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Random;
 
 public class Smartphone extends Product {
@@ -61,4 +62,10 @@ public class Smartphone extends Product {
     return String.format("%s, IMEI: %d, Memoria: %.1f GB", super.toStringSimple(), imei, memoryQuantity);
   }
 
+  public float getDiscount(boolean isFidelityCardValid) {
+    if (isFidelityCardValid)
+      return this.memoryQuantity < 32.0f ? 0.05f : 0.02f;
+
+    return 0f;
+  };
 }

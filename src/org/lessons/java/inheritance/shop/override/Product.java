@@ -99,4 +99,16 @@ public class Product {
         "Codice: %s, Nome: %s, Brand: %s, Prezzo(IVA): %.2f",
         this.code, this.name, this.brand, getPriceAfterTax());
   }
+
+  public float getDiscount(boolean isFidelityCardValid) {
+    return 0f;
+  }
+
+  public BigDecimal getPriceAfterDiscount(float productDiscountAmount) {
+    return price
+        .multiply(BigDecimal.ONE.subtract(BigDecimal.valueOf(productDiscountAmount)))
+        .multiply(BigDecimal.ONE.add(iva))
+        .setScale(2, RoundingMode.DOWN);
+  }
+
 }

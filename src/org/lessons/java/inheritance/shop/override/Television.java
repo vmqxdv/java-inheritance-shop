@@ -49,4 +49,11 @@ public class Television extends Product {
   public String toStringSimple() {
     return String.format("%s, Pollici: %d, Funzionalità smart: %b", super.toStringSimple(), this.inch, this.isSmart);
   }
+
+  public float getDiscount(boolean isFidelityCardValid) {
+    if (isFidelityCardValid)
+      return !this.isSmart ? 0.1f : 0.02f;
+
+    return 0f;
+  };
 }
