@@ -6,9 +6,32 @@ import java.math.BigDecimal;
 public class Cart {
 
   // -- Class Cart
-  private Product[] cart = new Product[0];
+  private Product[] cart;
 
-  private void addItem(Product product) {
+  public Cart() {
+    this.cart = new Product[0];
+  }
+
+  // -- Items
+  public Product[] getItems() {
+    return cart;
+  }
+
+  // -- Additional
+  @Override
+  public String toString() {
+    if (cart.length == 0)
+      return "Il carrello è vuoto.";
+
+    String result = "\nCarrello:";
+    for (int i = 0; i < cart.length; i++) {
+      result = result + String.format("\n(%d) %s", i, cart[i].toStringSimple());
+    }
+
+    return result;
+  }
+
+  public void addItem(Product product) {
     Product[] newCart = new Product[this.cart.length + 1];
 
     for (int i = 0; i < this.cart.length; i++) {
@@ -83,6 +106,8 @@ public class Cart {
     }
 
     cart.addItem(selectedProductGroup[userChoice]);
+
+    System.out.println(cart.toString());
 
     sc.close();
   }
