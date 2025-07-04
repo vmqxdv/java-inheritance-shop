@@ -24,12 +24,12 @@ public class Cart {
     if (cart.length == 0)
       return "Il carrello è vuoto.";
 
-    String result = "\nCarrello:";
+    StringBuilder result = new StringBuilder("\nCarrello:");
     for (int i = 0; i < cart.length; i++) {
-      result = result + String.format("\n(%d) %s", i, cart[i].toStringSimple());
+      result.append(String.format("\n(%d) %s", i, cart[i].toStringSimple()));
     }
 
-    return result;
+    return result.toString();
   }
 
   public void addItem(Product product) {
@@ -79,90 +79,48 @@ public class Cart {
 
     boolean isShoppingComplete = false;
 
-    String nextChoiceText = "Quale tipo di prodotto vuoi aggiungere al tuo carrello?\nDigita il numero corrispondente al prodotto:\nTelefono(0) / Televisore(1) / Cuffie(2)";
-    String errorText = "";
-
     // -- Products selection
     do {
-      do {
-        System.out.println(errorText + nextChoiceText);
-        userChoice = sc.nextInt();
-
-        if (userChoice < 0 || userChoice > 2) {
-          errorText = String.format("\n\u001B[31m\"%d\" non è un tipo di prodotto valido!\u001B[0m\n", userChoice);
-        } else
-          errorText = "";
-      } while (userChoice < 0 || userChoice > 2);
+      userChoice = getValidatedIntInput(sc,
+          "Quale tipo di prodotto vuoi aggiungere al tuo carrello?\nDigita il numero corrispondente al prodotto:\nTelefono(0) / Televisore(1) / Cuffie(2)",
+          "non è un tipo di prodotto valido!", 0, 2);
 
       Product[] selectedProductGroup = productGroups[userChoice];
 
-      nextChoiceText = "\nSeleziona quale prodotto vuoi aggiungere al carrello,\nper farlo digita il numero corrispondente al prodotto.\n\nLista prodotti:";
+      StringBuilder nextChoiceText = new StringBuilder(
+          "\nSeleziona quale prodotto vuoi aggiungere al carrello,\nper farlo digita il numero corrispondente al prodotto.\n\nLista prodotti:");
 
       for (int i = 0; i < selectedProductGroup.length; i++) {
         Product product = selectedProductGroup[i];
-        nextChoiceText = (String.format("%s\n(%d) %s", nextChoiceText, i, product.toStringSimple()));
+        nextChoiceText.append(String.format("\n(%d) %s", i, product.toStringSimple()));
       }
 
-      System.out.println(nextChoiceText);
-
-      userChoice = sc.nextInt();
-
-      while (userChoice < 0 || userChoice > (selectedProductGroup.length - 1)) {
-        System.out.println(errorText + nextChoiceText);
-
-        userChoice = sc.nextInt();
-
-        if (userChoice < 0 || userChoice > (selectedProductGroup.length - 1)) {
-          errorText = String.format("\n\u001B[31m\"%d\" non è un prodotto valido!\u001B[0m\n", userChoice);
-        } else
-          errorText = "";
-      }
+      userChoice = getValidatedIntInput(sc, nextChoiceText.toString(), "non è un prodotto valido!", 0,
+          selectedProductGroup.length - 1);
 
       cart.addItem(selectedProductGroup[userChoice]);
 
-      nextChoiceText = "\nVuoi continuare ad aggiungere articoli o andare al pagamento?\n\nContinua lo shopping(0) / Vai al pagamento(1)";
-      System.out.println(nextChoiceText);
+      userChoice = getValidatedIntInput(sc,
+          "\nVuoi continuare ad aggiungere articoli o andare al pagamento?\n\nContinua lo shopping(0) / Vai al pagamento(1)",
+          "non è una risposta valida!", 0, 1);
 
-      userChoice = sc.nextInt();
-
-      while (userChoice < 0 || userChoice > 1) {
-        System.out.println(errorText + nextChoiceText);
-
-        userChoice = sc.nextInt();
-
-        if (userChoice < 0 || userChoice > 1) {
-          errorText = String.format("\n\u001B[31m\"%d\" non è una risposta valida!\u001B[0m\n", userChoice);
-        } else
-          errorText = "";
-      }
-
-      isShoppingComplete = userChoice > 0 ? true : false;
+      isShoppingComplete = userChoice == 1;
 
     } while (!isShoppingComplete);
 
     // -- Fidelity Card Controll
-    String userFidelityCardCode;
-    boolean isFidelityCardValid;
-
-    nextChoiceText = "\nSei un possesso di una fideliry card? Si(0) / No(1)";
-    System.out.println(nextChoiceText);
-    userChoice = sc.nextInt();
-
-    while (userChoice < 0 || userChoice > 1) {
-      nextChoiceText = String.format("\n\u001B[31m\"%d\" non è una risposta valida!\u001B[0m\n%s", userChoice,
-          nextChoiceText);
-      System.out.println(nextChoiceText);
-
-      userChoice = sc.nextInt();
-    }
+    int userFidelityCardAnswer = getValidatedIntInput(sc, "\nSei un possesso di una fidelity card? Si(0) / No(1)",
+        "non è una risposta valida!", 0, 1);
 
     sc.nextLine();
 
-    if (userChoice == 0) {
-      nextChoiceText = "\nScrivi il codice della tua fidelity card:";
+    if (userFidelityCardAnswer == 0) {
+      String userFidelityCardCode;
+      boolean isFidelityCardValid;
+      String errorText = "";
 
       do {
-        System.out.println(errorText + nextChoiceText);
+        System.out.println(errorText + "\nScrivi il codice della tua fidelity card:");
         userFidelityCardCode = sc.nextLine();
 
         isFidelityCardValid = Arrays.stream(validCardIds)
@@ -177,11 +135,30 @@ public class Cart {
 
       } while (!isFidelityCardValid && !userFidelityCardCode.equals("0"));
 
-      if (isFidelityCardValid) {
+      if (isFidelityCardValid)
         System.out.println("Carta valida");
-      }
     }
 
     sc.close();
+  }
+
+  private static int getValidatedIntInput(Scanner sc, String prompt, String errorMsg, int min, int max) {
+    int input;
+
+    while (true) {
+      System.out.println(prompt);
+
+      if (sc.hasNextInt()) {
+        input = sc.nextInt();
+
+        if (input >= min && input <= max)
+          break;
+      } else
+        sc.next();
+
+      System.out.printf("\n\u001B[31m\"%s\" %s\u001B[0m\n", sc.hasNext() ? sc.next() : "", errorMsg);
+    }
+
+    return input;
   }
 }
