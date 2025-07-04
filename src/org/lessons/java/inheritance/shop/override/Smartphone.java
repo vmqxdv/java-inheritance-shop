@@ -56,4 +56,9 @@ public class Smartphone extends Product {
     return String.format("%s\nIMEI: %d\nMemoria: %.1f GB\n%s", super.toString(), imei, memoryQuantity, "-".repeat(15));
   }
 
+  @Override
+  public String toStringSimple() {
+    return String.format("%s, IMEI: %d, Memoria: %.1f GB", super.toStringSimple(), imei, memoryQuantity);
+  }
+
 }

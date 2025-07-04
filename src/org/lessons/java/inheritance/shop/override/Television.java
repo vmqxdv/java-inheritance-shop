@@ -44,4 +44,9 @@ public class Television extends Product {
     return String.format("%s\nPollici: %d\nFunzionalità smart: %b\n%s", super.toString(), this.inch, this.isSmart,
         "-".repeat(15));
   }
+
+  @Override
+  public String toStringSimple() {
+    return String.format("%s, Pollici: %d, Funzionalità smart: %b", super.toStringSimple(), this.inch, this.isSmart);
+  }
 }

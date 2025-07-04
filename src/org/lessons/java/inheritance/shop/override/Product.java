@@ -91,7 +91,12 @@ public class Product {
   public String toString() {
     return String.format(
         "Informazioni prodotto:\nCodice: %s\nNome: %s\nBrand: %s\nPrezzo: %.2f\nIva: %.0f%%\nPrezzo con iva: %.2f",
-        this.code, this.name, this.brand, this.price, this.iva.multiply(new BigDecimal(100)),
-        getPriceAfterTax());
+        this.code, this.name, this.brand, this.price, this.iva.multiply(new BigDecimal(100)), getPriceAfterTax());
+  }
+
+  public String toStringSimple() {
+    return String.format(
+        "Codice: %s, Nome: %s, Brand: %s, Prezzo(IVA): %.2f",
+        this.code, this.name, this.brand, getPriceAfterTax());
   }
 }
