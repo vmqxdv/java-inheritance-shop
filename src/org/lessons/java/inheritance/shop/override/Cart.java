@@ -75,39 +75,57 @@ public class Cart {
 
     Scanner sc = new Scanner(System.in);
 
-    String choiceExplanationText = "Quale tipo di prodotto vuoi aggiungere al tuo carrello?\nDigita il numero corrispondente al prodotto:\nTelefono(0) / Televisore(1) / Cuffie(2)";
+    boolean isShoppingComplete = false;
+
     do {
-      System.out.println(choiceExplanationText);
-      userChoice = sc.nextInt();
-      choiceExplanationText = String.format("\u001B[31m\"%d\" non è un tipo di prodotto valido!\u001B[0m\n%s",
-          userChoice,
-          choiceExplanationText);
-    } while (userChoice < 0 || userChoice > 2);
+      String nextChoiceText = "Quale tipo di prodotto vuoi aggiungere al tuo carrello?\nDigita il numero corrispondente al prodotto:\nTelefono(0) / Televisore(1) / Cuffie(2)";
+      do {
+        System.out.println(nextChoiceText);
+        userChoice = sc.nextInt();
+        nextChoiceText = String.format("\u001B[31m\"%d\" non è un tipo di prodotto valido!\u001B[0m\n%s",
+            userChoice,
+            nextChoiceText);
+      } while (userChoice < 0 || userChoice > 2);
 
-    Product[] selectedProductGroup = productGroups[userChoice];
+      Product[] selectedProductGroup = productGroups[userChoice];
 
-    choiceExplanationText = "\nSeleziona quale prodotto vuoi aggiungere al carrello,\nper farlo digita il numero corrispondente al prodotto.\n\nLista prodotti:";
+      nextChoiceText = "\nSeleziona quale prodotto vuoi aggiungere al carrello,\nper farlo digita il numero corrispondente al prodotto.\n\nLista prodotti:";
 
-    for (int i = 0; i < selectedProductGroup.length; i++) {
-      Product product = selectedProductGroup[i];
-      choiceExplanationText = (String.format("%s\n(%d) %s", choiceExplanationText, i, product.toStringSimple()));
-    }
+      for (int i = 0; i < selectedProductGroup.length; i++) {
+        Product product = selectedProductGroup[i];
+        nextChoiceText = (String.format("%s\n(%d) %s", nextChoiceText, i, product.toStringSimple()));
+      }
 
-    System.out.println(choiceExplanationText);
-
-    userChoice = sc.nextInt();
-
-    while (userChoice < 0 || userChoice > (selectedProductGroup.length - 1)) {
-      choiceExplanationText = String.format("\n\u001B[31m\"%d\" non è un prodotto valido!\u001B[0m\n%s", userChoice,
-          choiceExplanationText);
-      System.out.println(choiceExplanationText);
+      System.out.println(nextChoiceText);
 
       userChoice = sc.nextInt();
-    }
 
-    cart.addItem(selectedProductGroup[userChoice]);
+      while (userChoice < 0 || userChoice > (selectedProductGroup.length - 1)) {
+        nextChoiceText = String.format("\n\u001B[31m\"%d\" non è un prodotto valido!\u001B[0m\n%s", userChoice,
+            nextChoiceText);
+        System.out.println(nextChoiceText);
 
-    System.out.println(cart.toString());
+        userChoice = sc.nextInt();
+      }
+
+      cart.addItem(selectedProductGroup[userChoice]);
+
+      nextChoiceText = "\nVuoi continuare ad aggiungere articoli o andare al pagamento?\n\nContinua lo shopping(0) / Vai al pagamento(1)";
+      System.out.println(nextChoiceText);
+
+      userChoice = sc.nextInt();
+
+      while (userChoice < 0 || userChoice > 1) {
+        nextChoiceText = String.format("\n\u001B[31m\"%d\" non è una risposta valida!\u001B[0m\n%s", userChoice,
+            nextChoiceText);
+        System.out.println(nextChoiceText);
+
+        userChoice = sc.nextInt();
+      }
+
+      isShoppingComplete = userChoice != 0 ? true : false;
+
+    } while (!isShoppingComplete);
 
     sc.close();
   }
