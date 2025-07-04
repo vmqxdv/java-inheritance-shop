@@ -41,6 +41,7 @@ public class Headphones extends Product {
   // -- Additional
   @Override
   public String toString() {
-    return String.format("%s\nColore: %s\nFunzionalità bluetooth: %b", super.toString(), this.color, this.isWireless);
+    return String.format("%s\nColore: %s\nFunzionalità bluetooth: %b\n%s", super.toString(), this.color,
+        this.isWireless, "-".repeat(15));
   }
 }

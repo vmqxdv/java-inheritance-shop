@@ -53,7 +53,7 @@ public class Smartphone extends Product {
   // -- Additional
   @Override
   public String toString() {
-    return String.format("%s\nIMEI: %d\nMemoria: %.1fGB", super.toString(), imei, memoryQuantity);
+    return String.format("%s\nIMEI: %d\nMemoria: %.1f GB\n%s", super.toString(), imei, memoryQuantity, "-".repeat(15));
   }
 
 }

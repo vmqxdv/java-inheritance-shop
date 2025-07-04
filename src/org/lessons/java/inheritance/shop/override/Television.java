@@ -41,6 +41,7 @@ public class Television extends Product {
   // -- Additional
   @Override
   public String toString() {
-    return String.format("%s\nPollici: %d\nFunzionalità smart: %b", super.toString(), this.inch, this.isSmart);
+    return String.format("%s\nPollici: %d\nFunzionalità smart: %b\n%s", super.toString(), this.inch, this.isSmart,
+        "-".repeat(15));
   }
 }
